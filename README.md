@@ -16,15 +16,32 @@ official (and boring) [introduction](https://jupyter-notebook-beginner-guide.rea
 
 # Installation
 
+setools is required but no longer in PyPi.  You'll have to download https://github.com/SELinuxProject/setools and install it.
+Note that libsepol has to be at least at 2.7 to work with newer setools (4.2 as of this writing).  If your OS repo
+does not offer this version, you can get it from https://github.com/SELinuxProject/selinux/tree/master/libsepol and build
+it yourself.  After you build it, do the following:
+
+```
+sudo cp selinux/libsepol/src/libsepol.a /usr/lib64/
+sudo cp selinux/libsepol/src/libsepol.so.1 /usr/lib64/
+sudo rm /usr/include/sepol/*
+cd selinux/libsepol/include/sepol
+sudo cp -r * /usr/include/sepol
+cd ../..
+sudo cp -r cil /usr/include/sepol
+```
+
+Confirm it works with "import setools" before moving on.  You may have to install some other modules with pip3.
+
+Note that https://github.com/TresysTechnology/setools and https://github.com/TresysTechnology/setools/wiki, although
+deprecated, might have some more OS-specific install notes regarding dependencies.
+
 SPAN is pure Python and supports Python 3 only. You can install with:
 
 ```
 $ pip3 install -r python_requirements.txt
 $ python3 setup.py install
 ```
-
-The only tricky requirement can be SETools 4. See https://github.com/TresysTechnology/setools for more information
-on installing SETools.
 
 ## MacOS Support
 

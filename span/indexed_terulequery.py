@@ -23,8 +23,7 @@ import re
 from setools import mixins, query, TypeAttributeQuery, TypeQuery
 from setools.descriptors import CriteriaDescriptor, CriteriaSetDescriptor
 from setools.policyrep import IoctlSet, TERuletype
-from setools.policyrep.typeattr import Type, BaseType
-from setools.policyrep.exception import RuleUseError, RuleNotConditional
+from setools.policyrep import Type, BaseType, RuleUseError, RuleNotConditional
 from setools.util import match_regex, match_indirect_regex, match_regex_or_set
 
 class TERuleIndex(object):
@@ -85,7 +84,7 @@ def get_type_names(policy, tname, is_regex, indirect):
     # Looks like we have to match types and attributes separately
     types = set()
     attributes = set()
-    if isinstance(tname, str) or isinstance(tname, BaseType):
+    if isinstance(tname, str) or isinstance(tname, BaseType) or is_regex:
         tname = [tname]
     for name in tname:
         types.update(TypeQuery(policy, name=name, name_regex=is_regex).results())

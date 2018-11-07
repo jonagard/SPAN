@@ -35,8 +35,9 @@ import re
 
 import pandas as pd
 import setools as se
+from setools.dta import DomainTransitionAnalysis
 from IPython.display import display, Markdown
-from setools.policyrep.typeattr import TypeAttribute
+from setools.policyrep import TypeAttribute, BaseTERule, BaseType
 
 from . import indexed_terulequery
 
@@ -271,7 +272,7 @@ class Policy(se.SELinuxPolicy):
         return sorted(se.RBACRuleQuery(self, **kwargs).results())
 
     def dta_analysis(self, domain, *args, **kwargs):
-        return list(se.DomainTransitionAnalysis(self, *args, **kwargs).transitions(domain))
+        return list(DomainTransitionAnalysis(self, *args, **kwargs).transitions(domain))
 
     def types_re(self, s, **kwargs):
         q = se.TypeQuery(self, name_regex=True, **kwargs)
@@ -765,10 +766,20 @@ packet_summary_template = """
 def str_repr(self):
     return str(self)
 
+# I'm not sure what the side-effect of commenting these out is, but it doesn't
+# work with setools 4.2
 
-se.policyrep.typeattr.BaseType.__repr__ = str_repr
-se.policyrep.terule.BaseTERule.__repr__ = str_repr
-se.policyrep.role.BaseRole.__repr__ = str_repr
+# In [5]: BaseType.__repr__ = str_repr
+# ---------------------------------------------------------------------------
+# TypeError                                 Traceback (most recent call last)
+# <ipython-input-5-d05557410141> in <module>
+# ----> 1 BaseType.__repr__ = str_repr
+#
+# TypeError: can't set attributes of built-in/extension type 'setools.policyrep.BaseType'
+
+#BaseType.__repr__ = str_repr
+#BaseTERule.__repr__ = str_repr
+#BaseRole.__repr__ = str_repr
 
 import subprocess
 from pygments import highlight
